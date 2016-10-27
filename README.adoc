@@ -1,0 +1,10 @@
+= The writing scafford
+This repository is the scafford that define envirinment for writing document.
+
+Goals is here.
+
+* Can start easily.
+** only clone this repository, or execute only one command.
+* One-stop solution.
+** Include test, validation, and publish.
+

@@ -19,5 +19,5 @@ WARNING: Requirements for this repository are changes frequency. Because I optim
 
 == Install ==
 1. Clone this repository to any location you like.
-2. Run +docker build -t asciidoctor-docker/Dockerfile asciidoctor+
+2. Run ++docker build -t asciidoctor asciidoctor-docker/++
 

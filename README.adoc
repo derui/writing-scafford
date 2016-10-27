@@ -8,3 +8,16 @@ Goals is here.
 * One-stop solution.
 ** Include test, validation, and publish.
 
+== Requirements
+
+WARNING: Requirements for this repository are changes frequency. Because I optimize environment and writing method something.
+
+* Docker
+** To run asciidoctor.
+* Asciidoctor (Optional)
+** If your environment can not install docker
+
+== Install ==
+1. Clone this repository to any location you like.
+2. Run +docker build -t asciidoctor-docker/Dockerfile asciidoctor+
+

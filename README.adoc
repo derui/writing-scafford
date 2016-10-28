@@ -1,4 +1,5 @@
 = The writing scafford
+
 This repository is the scafford that define envirinment for writing document.
 
 Goals is here.
@@ -7,6 +8,8 @@ Goals is here.
 ** only clone this repository, or execute only one command.
 * One-stop solution.
 ** Include test, validation, and publish.
+* Can incremental build documents
+** Include live-reload server.
 
 == Requirements
 
@@ -15,9 +18,24 @@ WARNING: Requirements for this repository are changes frequency. Because I optim
 * Docker
 ** To run asciidoctor.
 * Asciidoctor (Optional)
-** If your environment can not install docker
+** If your environment can not install docker, you must install it.
 
 == Install ==
+
 1. Clone this repository to any location you like.
 2. Run ++docker build -t asciidoctor asciidoctor-docker/++
+3. Run ++./writing init++
+
+== Usage
+
+Before writing something, you should launch livereload-server with follow command.
+
+[source, shell]
+----
+$ ./writing launch-server
+
+# If you do not have priviledge to use docker without sudo, do below instead.
+
+$ sudo ./writing launch-server
+----
 

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -eu
+if [ -x greadlink ]; then
+    current_dir=$(dirname $(greadlink -f $0))
+else
+    current_dir=$(dirname $(readlink -f $0))
+fi
+
+# initialize anything
+init() {
+
+    echo "Build asciidoctor docker image"
+    sudo docker build -t asciidoctor ${current_dir}/asciidoctor-docker
+    echo "Done."
+}
+
+# launch live-reload server.
+# This command should interrupt with Ctrl-C
+launch-server() {
+    echo "Launch edit-per-build server"
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents -it --rm --net=host asciidoctor guard start
+}
+
+build() {
+    echo "Build document"
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents -it --rm asciidoctor asciidoctor -o public/index.html src/index.adoc
+}
+
+subcommand() {
+    _ls_available_commands() {
+        local fs="$(compgen -A function)"
+
+        join <(echo "$fs") <(echo "$__DEFAULT_FUNCTIONS") | grep -v '^_'
+    }
+
+    _show_help() {
+        echo 'Available commands'
+        _ls_available_commands | awk '{print "-", $0}'
+        exit 1
+    }
+
+    if [ -n "$(_ls_available_commands | awk -v f=$1 'f==$0')" ]; then
+        "$@"
+    else
+        _show_help
+    fi
+}
+
+__DEFAULT_FUNCTIONS="$(compgen -A function)"
+
+subcommand "$@"

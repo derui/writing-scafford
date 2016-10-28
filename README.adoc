@@ -6,8 +6,6 @@ Goals is here.
 
 * Can start easily.
 ** only clone this repository, or execute only one command.
-* One-stop solution.
-** Include test, validation, and publish.
 * Can incremental build documents
 ** Include live-reload server.
 
@@ -23,19 +21,28 @@ WARNING: Requirements for this repository are changes frequency. Because I optim
 == Install ==
 
 1. Clone this repository to any location you like.
-2. Run ++docker build -t asciidoctor asciidoctor-docker/++
-3. Run ++./writing init++
+2. Run ++./writing init++
 
 == Usage
 
-Before writing something, you should launch livereload-server with follow command.
+All your documents wrote by asciidoc must be in ++src++ directory.
+
+While writing, when you want to build your documents, type command follow.
+
+NOTE: Must exist ++src/index.adoc++ to build document.
+
+[source, shell]
+----
+$ ./writing build
+----
+
+If you felt tired to type build command each editing, you can launch automation-build server with follow command.
+
+NOTE: Your user must be on wheel group.
 
 [source, shell]
 ----
 $ ./writing launch-server
-
-# If you do not have priviledge to use docker without sudo, do below instead.
-
-$ sudo ./writing launch-server
 ----
 
+After above command, when you edit documents, then build and output it to ++public++ directory! And you can view it on browser at http://localhost:3000 .

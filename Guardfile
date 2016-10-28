@@ -5,7 +5,3 @@ guard 'shell' do
     Asciidoctor.convert_file m[0]
   }
 end
-
-guard 'livereload' do
-  watch(%r{^.+\.(css|js|html)$})
-end

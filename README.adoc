@@ -9,6 +9,8 @@ Goals is here.
 * Can incremental build documents
 ** Include live-reload server.
 
+Should clone each document root? Not need. Read Install section.
+
 == Requirements
 
 WARNING: Requirements for this repository are changes frequency. Because I optimize environment and writing method something.
@@ -20,8 +22,10 @@ WARNING: Requirements for this repository are changes frequency. Because I optim
 
 == Install ==
 
-1. Clone this repository to any location you like.
-2. Run ++./writing init++
+1. Clone this repository to any location you like
+2. Run ++./writing init++ (only once)
+3. Run ++./writing install <directory>++
+4. You can writing in the path ++<directory>++ initialized above
 
 == Usage
 

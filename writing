@@ -15,6 +15,26 @@ init() {
     echo "Done."
 }
 
+# Install scafford in specified directory
+install() {
+    local path=$1
+
+    if [ -z "$path" ]; then
+        echo "init command must have one argument that is a directory to install"
+        exit 1
+    fi
+
+    if [ ! -d "$path" ]; then
+        echo "init command must have one argument that is a directory to install"
+        exit 1
+    fi
+
+    echo "Install files to [$path]"
+    cp -r ${current_dir}/src ${current_dir}/public ${current_dir}/writing \
+       ${current_dir}/Guardfile ${current_dir}/.gitignore ${path}
+    echo "Done."
+}
+
 # launch live-reload server.
 # This command should interrupt with Ctrl-C
 launch-server() {

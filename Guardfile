@@ -1,10 +1,24 @@
 require 'asciidoctor'
-require 'webrick'
 
-guard 'shell' do
-  watch(/^src\/.*\.adoc$/) {|m|
-    Asciidoctor.convert_file m[0]
+guard :shell do
+  watch(%r{(.+)\.adoc}) {|m|
+    `asciidoctor -o /documents/public/index.html /documents/src/index.adoc`
   }
-end
 
-WEBrick::HTTPServer.new(:DocumentRoot => "/documents", :Port => 3000).start
+  Process.fork do
+    trap("INT") { exit 0}
+    `ruby /watcher.rb`
+  end
+
+  Process.fork do
+    require 'webrick'
+    webrick = WEBrick::HTTPServer.new({
+      :DocumentRoot => '/documents/public/',
+      :BindAddress => '0.0.0.0',
+      :Port => 3000
+    })
+    trap("INT") { webrick.shutdown }
+    webrick.start
+
+  end
+end

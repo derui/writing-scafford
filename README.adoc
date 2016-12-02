@@ -1,6 +1,6 @@
 = The writing scafford
 
-This repository is the scafford that define envirinment for writing document.
+This repository is the scafford that define envirinment for writing document on some Linux distributions.
 
 Goals is here.
 
@@ -8,6 +8,12 @@ Goals is here.
 ** only clone this repository, or execute only one command.
 * Can incremental build documents
 ** Include live-reload server.
+
+Not goals of this repository.
+
+* Run every platform
+** Using platforms by me are Windows and Linux, not include macOS.
+** To be able to run linux on Windows with some virtualizations also VirtualBox, Hyper-V, VMware and others, macOS same.
 
 == Requirements
 
@@ -20,7 +26,7 @@ WARNING: Requirements for this repository are changes frequency. Because I optim
 
 == Install ==
 
-1. Clone this repository to any location you like.
+1. Clone this repository to any location as you like.
 2. Run ++./writing init++
 
 == Usage

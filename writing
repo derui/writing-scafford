@@ -24,6 +24,26 @@ serve() {
     sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -it --rm --net=host asciidoctor guard -w /mirror -i
 }
 
+# Install scafford in specified directory
+install() {
+    local path=$1
+
+    if [ -z "$path" ]; then
+        echo "init command must have one argument that is a directory to install"
+        exit 1
+    fi
+
+    if [ ! -d "$path" ]; then
+        echo "init command must have one argument that is a directory to install"
+        exit 1
+    fi
+
+    echo "Install files to [$path]"
+    cp -r ${current_dir}/src ${current_dir}/public ${current_dir}/writing \
+       ${current_dir}/Guardfile ${current_dir}/.gitignore ${path}
+    echo "Done."
+}
+
 build() {
     echo "Build document"
     sudo docker run --name=asciidoctor -v ${current_dir}:/documents -it --rm asciidoctor asciidoctor -o public/index.html src/index.adoc

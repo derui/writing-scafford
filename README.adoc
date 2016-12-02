@@ -15,6 +15,10 @@ Not goals of this repository.
 ** Using platforms by me are Windows and Linux, not include macOS.
 ** To be able to run linux on Windows with some virtualizations also VirtualBox, Hyper-V, VMware and others, macOS same.
 
+=======
+Should clone each document root? Not need. Read Install section.
+=======
+
 == Requirements
 
 WARNING: Requirements for this repository are changes frequency. Because I optimize environment and writing method something.
@@ -26,8 +30,10 @@ WARNING: Requirements for this repository are changes frequency. Because I optim
 
 == Install ==
 
-1. Clone this repository to any location as you like.
-2. Run ++./writing init++
+1. Clone this repository to any location you like
+2. Run ++./writing init++ (only once)
+3. Run ++./writing install <directory>++
+4. You can writing in the path ++<directory>++ initialized above
 
 == Usage
 
@@ -48,7 +54,7 @@ NOTE: Your user must be on wheel group.
 
 [source, shell]
 ----
-$ ./writing launch-server
+$ ./writing serve
 ----
 
 After above command, when you edit documents, then build and output it to ++public++ directory! And you can view it on browser at http://localhost:3000 .

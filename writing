@@ -24,6 +24,16 @@ serve() {
     sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -it --rm --net=host asciidoctor guard -w /mirror -i
 }
 
+# publish documents in public/ and archive as .zip
+archive() {
+    archive_file=published.zip
+    echo "Export and Archive published files to $archive_file"
+    build;
+
+    zip -r $archive_file public
+    test $? && echo "Finished to export archives."
+}
+
 # Install scafford in specified directory
 install() {
     local path=$1

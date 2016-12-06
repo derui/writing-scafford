@@ -1,8 +1,15 @@
 require 'asciidoctor'
+require 'pathname'
+current_dir = Pathname.new("/mirror/src")
 
 guard :shell do
-  watch(%r{(.+)\.adoc}) {|m|
-    `asciidoctor -o /documents/public/index.html /documents/src/index.adoc`
+  watch(%r{(.+\.adoc)}) {|m|
+    p "Build document with #{m[1].to_s}"
+    dir = Pathname.new(m[1]).expand_path.dirname
+    base = Pathname.new(m[1]).basename(".adoc")
+    rel = dir.relative_path_from(current_dir)
+    rel = rel / base
+    `asciidoctor -o /documents/public/#{rel.to_s}.html #{m[1]}`
   }
 
   Process.fork do

@@ -56,7 +56,10 @@ install() {
 
 build() {
     echo "Build document"
-    sudo docker run --name=asciidoctor -v ${current_dir}:/documents -it --rm asciidoctor asciidoctor -o public/index.html src/index.adoc
+    for i in $(ls src); do
+        base=$(basename ${i} ".adoc")
+        sudo docker run --name=asciidoctor -v ${current_dir}:/documents -it --rm asciidoctor asciidoctor -o public/${base}.html src/${base}.adoc
+    done
 }
 
 subcommand() {

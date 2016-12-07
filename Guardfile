@@ -3,6 +3,11 @@ require 'pathname'
 current_dir = Pathname.new("/mirror/src")
 
 guard :shell do
+  watch(%r{/mirror/assets/.*}) {|m|
+    p "Sync assets to public"
+    `rsync -avh --del /documents/assets /documents/public`
+  }
+
   watch(%r{(.+\.adoc)}) {|m|
     p "Build document with #{m[1].to_s}"
     dir = Pathname.new(m[1]).expand_path.dirname

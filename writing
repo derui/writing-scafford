@@ -21,7 +21,10 @@ init() {
 serve() {
     echo "Launch server hosted generated files."
     echo "Ctrl-C if you stop server."
-    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -it --rm --net=host asciidoctor guard -w /mirror -i
+    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -it --rm \
+         -p 35729:35729 \
+         -p 3000:3000 \
+         asciidoctor guard -w /mirror -i
 }
 
 # publish documents in public/ and archive as .zip

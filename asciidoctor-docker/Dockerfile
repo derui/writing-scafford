@@ -1,9 +1,9 @@
 FROM alpine:3.4
 
-RUN apk add --update --no-cache ruby asciidoctor ca-certificates rsync && \
+RUN apk add --update --no-cache ruby asciidoctor ca-certificates rsync libstdc++ && \
     update-ca-certificates && \
     apk add --no-cache --virtual build-dependencies build-base libffi-dev ruby-dev && \
-    gem install --no-ri --no-rdoc coderay guard io-console guard-shell && \
+    gem install --no-ri --no-rdoc coderay guard io-console guard-shell guard-livereload rack rack-livereload eventmachine && \
     gem cleanup && \
     mkdir /mirror && \
     apk del build-dependencies && \

@@ -1,6 +1,16 @@
-require 'asciidoctor'
 require 'pathname'
-current_dir = Pathname.new("/mirror/src")
+@current_dir = Pathname.new("/mirror/src")
+
+def get_relative_path(path, rel_dir)
+  dir = Pathname.new(path).expand_path.dirname
+  base = Pathname.new(path).basename
+  rel = dir.relative_path_from(rel_dir)
+  rel / base
+end
+
+guard :livereload, port: '35729' do
+  watch(%r{mirror/public/(.+\.html$)}) {|m| "#{m[1]}"}
+end
 
 guard :shell do
   watch(%r{/mirror/assets/.*}) {|m|
@@ -10,11 +20,8 @@ guard :shell do
 
   watch(%r{(.+\.adoc)}) {|m|
     p "Build document with #{m[1].to_s}"
-    dir = Pathname.new(m[1]).expand_path.dirname
-    base = Pathname.new(m[1]).basename(".adoc")
-    rel = dir.relative_path_from(current_dir)
-    rel = rel / base
-    `asciidoctor -o /documents/public/#{rel.to_s}.html #{m[1]}`
+    rel = get_relative_path(m[1], @current_dir)
+    `asciidoctor -o /documents/public/#{rel.basename(".adoc").to_s}.html #{m[1]}`
   }
 
   Process.fork do
@@ -23,14 +30,7 @@ guard :shell do
   end
 
   Process.fork do
-    require 'webrick'
-    webrick = WEBrick::HTTPServer.new({
-      :DocumentRoot => '/documents/public/',
-      :BindAddress => '0.0.0.0',
-      :Port => 3000
-    })
-    trap("INT") { webrick.shutdown }
-    webrick.start
-
+    trap("INT") {exit 0}
+    `rackup /documents/config.ru`
   end
 end

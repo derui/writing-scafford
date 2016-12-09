@@ -29,7 +29,10 @@ serve() {
 
 # publish documents in public/ and archive as .zip
 archive() {
-    archive_file=published.zip
+    local archive_file=$1
+    if [ "$archive_file" = "" ]; then
+        archive_file=published.zip
+    fi
     echo "Export and Archive published files to $archive_file"
     build;
 

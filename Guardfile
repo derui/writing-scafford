@@ -21,7 +21,7 @@ guard :shell do
   watch(%r{(.+\.adoc)}) {|m|
     p "Build document with #{m[1].to_s}"
     rel = get_relative_path(m[1], @current_dir)
-    `asciidoctor -o /documents/public/#{rel.basename(".adoc").to_s}.html #{m[1]}`
+    `asciidoctor -r asciidoctor-diagram -o /documents/public/#{rel.basename(".adoc").to_s}.html #{m[1]}`
   }
 
   Process.fork do

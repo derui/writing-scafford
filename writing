@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CONTENTS_SERVER=writing-host-server
+DRAWIO_SERVER=draw-io
 
 set -eu
 if [ -x greadlink ]; then
@@ -20,11 +21,18 @@ init() {
 # launch contents server.
 serve() {
     echo "Launch server hosted generated files."
-    echo "Ctrl-C if you stop server."
-    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -it --rm \
+    echo "`./writing stop` to stop servers."
+    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d --rm \
          -p 35729:35729 \
          -p 3000:3000 \
          asciidoctor guard -w /mirror -i
+
+    sudo docker run --name=$DRAWIO_SERVER -d --rm -p 8000:8000 draw-io
+}
+
+stop() {
+    echo "Stop serving containers"
+    sudo docker kill $CONTENTS_SERVER $DRAWIO_SERVER
 }
 
 # publish documents in public/ and archive as .zip
@@ -64,7 +72,7 @@ build() {
     echo "Build document"
     for i in $(ls src); do
         base=$(basename ${i} ".adoc")
-        sudo docker run --name=asciidoctor -v ${current_dir}:/documents -it --rm asciidoctor asciidoctor -r asciidoctor-diagram -o public/${base}.html src/${base}.adoc
+        sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor -r asciidoctor-diagram -o public/${base}.html src/${base}.adoc
     done
 
     rm -rf ${current_dir}/public/assets

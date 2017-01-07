@@ -79,6 +79,35 @@ build() {
     cp -r ${current_dir}/assets ${current_dir}/public
 }
 
+build-pdf() {
+    local name=$1
+    local theme=$2
+    local param=""
+
+    echo "Build document as pdf."
+    echo "The asciidoc to build is only the name of document is 'index.adoc'"
+
+    if [ "$name" = "" ]; then
+        echo "Specify the name of pdf"
+        exit 1
+    fi
+
+    if [ ! -e src/index.adoc ]; then
+        echo "Not found `src/index.adoc`"
+        exit 1
+    fi
+
+    if [ "$theme" != "" ]; then
+        param="-a pdf-stylesdir=assets/pdf/themes -a pdf-style=$theme -a pdf-fontdir=assets/pdf/fonts"
+    fi
+
+    rm -rf ${current_dir}/public/assets
+    cp -r ${current_dir}/assets ${current_dir}/public
+
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor \
+         -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf src/index.adoc
+}
+
 subcommand() {
     _ls_available_commands() {
         local fs="$(compgen -A function)"

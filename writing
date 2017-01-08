@@ -30,6 +30,18 @@ serve() {
     sudo docker run --name=$DRAWIO_SERVER -d --rm -p 8000:8000 draw-io
 }
 
+# launch contents server.
+serve-pdf() {
+    echo "Launch server hosted generated files."
+    echo "`./writing stop` to stop servers."
+    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d --rm \
+         -p 35729:35729 \
+         -p 3000:3000 \
+         asciidoctor guard -w /mirror -G /documents/Guardfile_pdf -i
+
+    sudo docker run --name=$DRAWIO_SERVER -d --rm -p 8000:8000 draw-io
+}
+
 stop() {
     echo "Stop serving containers"
     sudo docker kill $CONTENTS_SERVER $DRAWIO_SERVER

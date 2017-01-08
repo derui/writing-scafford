@@ -64,6 +64,7 @@ install() {
 
     echo "Install files to [$path]"
     cp -r ${current_dir}/src ${current_dir}/public ${current_dir}/writing \
+       ${current_dir}/config.ru \
        ${current_dir}/Guardfile ${current_dir}/.gitignore ${path}
     echo "Done."
 }

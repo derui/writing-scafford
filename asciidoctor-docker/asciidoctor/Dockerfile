@@ -7,6 +7,7 @@ RUN apk add --update --no-cache ruby asciidoctor ca-certificates rsync libstdc++
     update-ca-certificates && \
     apk add --no-cache --virtual build-dependencies build-base libffi-dev ruby-dev && \
     gem install --no-ri --no-rdoc json asciidoctor-diagram coderay guard io-console guard-shell guard-livereload rack rack-livereload eventmachine && \
+    gem install --no-ri --no-rdoc --pre asciidoctor-pdf && \
     gem cleanup && \
     npm install -g mermaid && \
     npm cache clean && \

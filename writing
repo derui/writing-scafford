@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CONTENTS_SERVER=writing-host-server
+DRAWIO_SERVER=draw-io
 
 set -eu
 if [ -x greadlink ]; then
@@ -20,11 +21,30 @@ init() {
 # launch contents server.
 serve() {
     echo "Launch server hosted generated files."
-    echo "Ctrl-C if you stop server."
-    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -it --rm \
+    echo "`./writing stop` to stop servers."
+    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d --rm \
          -p 35729:35729 \
          -p 3000:3000 \
          asciidoctor guard -w /mirror -i
+
+    sudo docker run --name=$DRAWIO_SERVER -d --rm -p 8000:8000 draw-io
+}
+
+# launch contents server.
+serve-pdf() {
+    echo "Launch server hosted generated files."
+    echo "`./writing stop` to stop servers."
+    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d --rm \
+         -p 35729:35729 \
+         -p 3000:3000 \
+         asciidoctor guard -w /mirror -G /documents/Guardfile_pdf -i
+
+    sudo docker run --name=$DRAWIO_SERVER -d --rm -p 8000:8000 draw-io
+}
+
+stop() {
+    echo "Stop serving containers"
+    sudo docker kill $CONTENTS_SERVER $DRAWIO_SERVER
 }
 
 # publish documents in public/ and archive as .zip
@@ -55,9 +75,14 @@ install() {
     fi
 
     echo "Install files to [$path]"
-    cp -r ${current_dir}/src ${current_dir}/public ${current_dir}/writing \
-       ${current_dir}/config.ru ${current_dir}/assets \
-       ${current_dir}/Guardfile ${current_dir}/.gitignore ${path}
+    mkdir -p ${path}/src
+    mkdir -p ${path}/public
+    mkdir -p ${path}/assets
+    cp -f ${current_dir}/src/.gitkeep ${path}/src/.gitkeep
+    cp -f ${current_dir}/public/.gitkeep ${path}/public/.gitkeep
+    cp -f ${current_dir}/assets/.gitkeep ${path}/assets/.gitkeep
+    cp ${current_dir}/writing ${current_dir}/config.ru ${current_dir}/Guardfile ${path}
+    cp ${current_dir}/.gitignore.scafford ${path}/.gitignore
     echo "Done."
 }
 
@@ -65,11 +90,40 @@ build() {
     echo "Build document"
     for i in $(ls src); do
         base=$(basename ${i} ".adoc")
-        sudo docker run --name=asciidoctor -v ${current_dir}:/documents -it --rm asciidoctor asciidoctor -r asciidoctor-diagram -o public/${base}.html src/${base}.adoc
+        sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor -r asciidoctor-diagram -o public/${base}.html src/${base}.adoc
     done
 
     rm -rf ${current_dir}/public/assets
     cp -r ${current_dir}/assets ${current_dir}/public
+}
+
+build-pdf() {
+    local name=$1
+    local theme=$2
+    local param=""
+
+    echo "Build document as pdf."
+    echo "The asciidoc to build is only the name of document is 'index.adoc'"
+
+    if [ "$name" = "" ]; then
+        echo "Specify the name of pdf"
+        exit 1
+    fi
+
+    if [ ! -e src/index.adoc ]; then
+        echo "Not found `src/index.adoc`"
+        exit 1
+    fi
+
+    if [ "$theme" != "" ]; then
+        param="-a pdf-stylesdir=assets/pdf/themes -a pdf-style=$theme -a pdf-fontdir=assets/pdf/fonts"
+    fi
+
+    rm -rf ${current_dir}/public/assets
+    cp -r ${current_dir}/assets ${current_dir}/public
+
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor \
+         -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf src/index.adoc
 }
 
 subcommand() {

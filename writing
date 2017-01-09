@@ -75,9 +75,13 @@ install() {
     fi
 
     echo "Install files to [$path]"
-    cp -r ${current_dir}/src ${current_dir}/public ${current_dir}/writing \
-       ${current_dir}/assets ${current_dir}/config.ru \
-       ${current_dir}/Guardfile ${path}
+    mkdir -p ${path}/src
+    mkdir -p ${path}/public
+    mkdir -p ${path}/assets
+    cp -f ${current_dir}/src/.gitkeep ${path}/src/.gitkeep
+    cp -f ${current_dir}/public/.gitkeep ${path}/public/.gitkeep
+    cp -f ${current_dir}/assets/.gitkeep ${path}/assets/.gitkeep
+    cp ${current_dir}/writing ${current_dir}/config.ru ${current_dir}/Guardfile ${path}
     cp ${current_dir}/.gitignore.scafford ${path}/.gitignore
     echo "Done."
 }

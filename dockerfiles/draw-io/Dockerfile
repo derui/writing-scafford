@@ -9,6 +9,6 @@ RUN apk add --update --no-cache python3 git ca-certificates && \
     rm -rf /tmp/*
 
 WORKDIR /draw-io/war
-EXPORT 8000
+EXPOSE 8000
 
 CMD /entrypoint.sh

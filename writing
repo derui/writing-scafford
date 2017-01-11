@@ -48,8 +48,7 @@ serve-pdf() {
 
 stop() {
     echo "Stop serving containers"
-    sudo docker kill $CONTENTS_SERVER $DRAWIO_SERVER
-    sudo docker rm $CONTENTS_SERVER $DRAWIO_SERVER
+    sudo docker rm -f $CONTENTS_SERVER $DRAWIO_SERVER
 }
 
 # publish documents in public/ and archive as .zip

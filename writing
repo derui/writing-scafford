@@ -40,7 +40,7 @@ serve-pdf() {
     echo "'./writing stop' to stop servers."
 
     stop
-    
+
     sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -p 35729:35729 \
          -p 3000:3000 \

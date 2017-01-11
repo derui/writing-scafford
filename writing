@@ -98,15 +98,13 @@ install() {
     cp -f ${current_dir}/assets/.gitkeep ${path}/assets/.gitkeep
     cp ${current_dir}/writing ${current_dir}/config.ru ${current_dir}/Guardfile* ${path}
     cp ${current_dir}/.gitignore.scafford ${path}/.gitignore
+    cp -r ${current_dir}/dockerfiles ${path}/
     echo "Done."
 }
 
 build() {
     echo "Build document"
-    for i in $(ls src); do
-        base=$(basename ${i} ".adoc")
-        sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor -r asciidoctor-diagram -o public/${base}.html src/${base}.adoc
-    done
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor -r asciidoctor-diagram -o public/index.html src/index.adoc
 
     rm -rf ${current_dir}/public/assets
     cp -r ${current_dir}/assets ${current_dir}/public

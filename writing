@@ -54,7 +54,7 @@ stop() {
 
     for c in $CONTENTS_SERVER $DRAWIO_SERVER; do
         if [ `sudo docker ps -f "name=$c" -q | grep -c ""` -gt 0 ]; then
-            sudo docker rm -f $CONTENTS_SERVER
+            sudo docker rm -f $c
         else
             echo "Not found running container named $c"
         fi

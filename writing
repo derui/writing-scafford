@@ -22,7 +22,7 @@ init() {
 # launch contents server.
 serve() {
     echo "Launch server hosted generated files."
-    echo "`./writing stop` to stop servers."
+    echo "'./writing stop' to stop servers."
 
     stop
 
@@ -37,18 +37,29 @@ serve() {
 # launch contents server.
 serve-pdf() {
     echo "Launch server hosted generated files."
-    echo "`./writing stop` to stop servers."
-    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d --rm \
+    echo "'./writing stop' to stop servers."
+
+    stop
+    
+    sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -p 35729:35729 \
          -p 3000:3000 \
          asciidoctor guard -w /mirror -G /documents/Guardfile_pdf -i
 
-    sudo docker run --name=$DRAWIO_SERVER -d --rm -p 8000:8000 draw-io
+    sudo docker run --name=$DRAWIO_SERVER -d -p 8000:8000 draw-io
 }
 
 stop() {
     echo "Stop serving containers"
-    sudo docker rm -f $CONTENTS_SERVER $DRAWIO_SERVER
+
+    for c in $CONTENTS_SERVER $DRAWIO_SERVER; do
+        if [ `sudo docker ps -f "name=$c" -q | grep -c ""` -gt 0 ]; then
+            sudo docker rm -f $CONTENTS_SERVER
+        else
+            echo "Not found running container named $c"
+        fi
+    done
+
 }
 
 # publish documents in public/ and archive as .zip

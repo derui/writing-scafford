@@ -104,9 +104,11 @@ install() {
 
 build() {
     echo "Build document"
-    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor -r asciidoctor-diagram -o public/index.html src/index.adoc
-
     rm -rf ${current_dir}/public/assets
+
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor /bin/bash -l -c \
+         "asciidoctor -r asciidoctor-diagram -o public/index.html src/index.adoc"
+
     cp -r ${current_dir}/assets ${current_dir}/public
 }
 
@@ -135,8 +137,8 @@ build-pdf() {
     rm -rf ${current_dir}/public/assets
     cp -r ${current_dir}/assets ${current_dir}/public
 
-    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor asciidoctor \
-         -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf src/index.adoc
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor /bin/bash -c -l \
+         "asciidoctor -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf src/index.adoc"
 }
 
 subcommand() {

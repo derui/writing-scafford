@@ -1,6 +1,8 @@
 require 'pathname'
 @current_dir = Pathname.new("/mirror/src")
 
+@current_user = ENV['USER_ID']
+
 guard :livereload, port: '35729' do
   watch(%r{mirror/public/(.+\.html$)}) {|m| "#{m[1]}"}
 end
@@ -9,6 +11,7 @@ guard :shell do
   watch(%r{/mirror/assets/.*}) {|m|
     p "Sync assets to public"
     `rsync -avh --del /documents/assets /documents/public`
+    `find /document/public -exec chown #{@current_user} {} \;`
   }
 
   watch(%r{(.+\.adoc)}) {|m|

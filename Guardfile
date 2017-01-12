@@ -11,12 +11,13 @@ guard :shell do
   watch(%r{/mirror/assets/.*}) {|m|
     p "Sync assets to public"
     `rsync -avh --del /documents/assets /documents/public`
-    `find /document/public -exec chown #{@current_user} {} \;`
+    `find /document/public -exec chown #{@current_user}:#{@current_group} {} \;`
   }
 
   watch(%r{(.+\.adoc)}) {|m|
     p "Build document with #{m[1].to_s}"
     `asciidoctor -r asciidoctor-diagram -o /documents/public/index.html /documents/src/index.adoc`
+    `find /document/public -exec chown #{@current_user}:#{@current_group} {} \;`
   }
 
   Process.fork do

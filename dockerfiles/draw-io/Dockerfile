@@ -5,6 +5,7 @@ COPY entrypoint.sh /
 RUN apk add --update --no-cache python3 git ca-certificates && \
     update-ca-certificates && \
     git clone https://github.com/jgraph/draw.io.git /draw-io && \
+    rm -rf /draw-io/.git && \
     chmod a+x /entrypoint.sh && \
     rm -rf /tmp/*
 

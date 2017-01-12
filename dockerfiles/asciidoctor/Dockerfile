@@ -1,25 +1,35 @@
-FROM alpine:3.5
+FROM debian:jessie
 
-ENV PHANTOMJS_VERSION 2.1.1
-COPY *.patch /
+ENV NODE_VERSION v6.9.4
+ENV RVM_RUBY_VERSION ruby-2.3.3
 
-RUN apk add --update --no-cache ruby asciidoctor ca-certificates rsync libstdc++ nodejs && \
-    update-ca-certificates && \
-    apk add --no-cache --virtual build-dependencies build-base libffi-dev ruby-dev && \
-    gem install --no-ri --no-rdoc json asciidoctor-diagram coderay guard io-console guard-shell guard-livereload rack rack-livereload eventmachine && \
-    gem install --no-ri --no-rdoc --pre asciidoctor-pdf && \
-    gem cleanup && \
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends curl ca-certificates libfontconfig-dev libssl-dev libfreetype6-dev libxft-dev && \
+    curl -L git.io/nodebrew | perl - setup && \
+    export PATH=$HOME/.nodebrew/current/bin:$PATH && \
+    echo 'export PATH=$HOME/.nodebrew/current/bin:$PATH' >> ~/.bashrc && \
+    nodebrew install-binary $NODE_VERSION && \
+    nodebrew use $NODE_VERSION && \
     npm install -g mermaid && \
     npm cache clean && \
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 && \
+    curl -sSL https://get.rvm.io | bash -s stable && \
+    echo 'source /etc/profile.d/rvm.sh' >> ~/.bashrc && \
+    /bin/bash -l -c "rvm install $RVM_RUBY_VERSION --binary" && \
+    /bin/bash -l -c "rvm use --default $RVM_RUBY_VERSION && \
+        gem install --no-rdoc --no-ri asciidoctor asciidoctor-diagram guard guard-shell io-console guard-livereload rack rack-livereload eventmachine && \
+        gem install --no-ri --no-rdoc --pre asciidoctor-pdf && \
+        gem cleanup" && \
     mkdir /mirror && \
-    apk del build-dependencies && \
+    apt-get upgrade -y && apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*  && \
     rm -rf /tmp/*
-
-RUN apk update \
-  && apk add --no-cache curl fontconfig \
-  && mkdir -p /usr/share && cd /usr/share \
-  && curl -L https://github.com/Overbryd/docker-phantomjs-alpine/releases/download/2.11/phantomjs-alpine-x86_64.tar.bz2 | tar xj \
-  && ln -s /usr/share/phantomjs/phantomjs /usr/bin/phantomjs \
+    
+RUN mkdir -p /usr/local/share && cd /usr/local/share \
+  && curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar xj \
+  && mv phantomjs-2.1.1-linux-x86_64 phantomjs \
+  && ln -s /usr/local/share/phantomjs/bin/phantomjs /usr/bin/phantomjs \
   && phantomjs --version
 
 WORKDIR /documents
@@ -27,4 +37,4 @@ VOLUME /documents
 
 ADD watcher.rb /watcher.rb
 
-CMD ["/bin/sh","-c","trap 'exit 0' INT; tail -f /dev/null"]
+CMD ["/bin/bash","-c","trap 'exit 0' INT; tail -f /dev/null"]

@@ -29,7 +29,7 @@ serve() {
     sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -p 35729:35729 \
          -p 3000:3000 \
-         asciidoctor guard -w /mirror -i
+         asciidoctor /bin/bash -l -c "guard -w /mirror -i"
 
     sudo docker run --name=$DRAWIO_SERVER -d -p 8000:8000 draw-io
 }
@@ -44,7 +44,7 @@ serve-pdf() {
     sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -p 35729:35729 \
          -p 3000:3000 \
-         asciidoctor guard -w /mirror -G /documents/Guardfile_pdf -i
+         asciidoctor /bin/bash -l -c "guard -w /mirror -G /documents/Guardfile_pdf -i"
 
     sudo docker run --name=$DRAWIO_SERVER -d -p 8000:8000 draw-io
 }

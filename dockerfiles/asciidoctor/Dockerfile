@@ -6,7 +6,7 @@ ENV RVM_RUBY_VERSION ruby-2.3.3
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends curl rsync ca-certificates libfontconfig-dev libssl-dev libfreetype6-dev libxft-dev && \
+    apt-get install -y --no-install-recommends curl rsync fonts-migmix ca-certificates libfontconfig && \
     curl -L git.io/nodebrew | perl - setup && \
     export PATH=$HOME/.nodebrew/current/bin:$PATH && \
     echo 'export PATH=$HOME/.nodebrew/current/bin:$PATH' >> ~/.bashrc && \
@@ -23,6 +23,7 @@ RUN apt-get update -y && \
         gem install --no-ri --no-rdoc --pre asciidoctor-pdf && \
         gem cleanup" && \
     mkdir /mirror && \
+    apt-get purge -y --auto-remove g++ gcc make patch automake autoconf automake libtool bison && \
     apt-get upgrade -y && apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*  && \
     rm -rf /tmp/*
     

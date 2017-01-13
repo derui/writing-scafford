@@ -2,6 +2,7 @@ require 'pathname'
 @current_dir = Pathname.new("/mirror/src")
 
 @current_user = ENV['USER_ID']
+@current_group = ENV['USER_GROUP']
 
 guard :livereload, port: '35729' do
   watch(%r{mirror/public/(.+\.html$)}) {|m| "#{m[1]}"}
@@ -16,7 +17,7 @@ guard :shell do
 
   watch(%r{(.+\.adoc)}) {|m|
     p "Build document with #{m[1].to_s}"
-    `asciidoctor -r asciidoctor-diagram -o /documents/public/index.html /documents/src/index.adoc`
+    `asciidoctor -r asciidoctor-diagram -o /documents/public/index.html /documents/assets/index.adoc`
     `find /document/public -exec chown #{@current_user}:#{@current_group} {} \;`
   }
 

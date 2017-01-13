@@ -94,12 +94,10 @@ install() {
     fi
 
     echo "Install files to [$path]"
-    mkdir -p ${path}/src
     mkdir -p ${path}/public
     mkdir -p ${path}/assets
-    cp -f ${current_dir}/src/.gitkeep ${path}/src/.gitkeep
-    cp -f ${current_dir}/public/.gitkeep ${path}/public/.gitkeep
     cp -f ${current_dir}/assets/.gitkeep ${path}/assets/.gitkeep
+    cp -f ${current_dir}/public/.gitkeep ${path}/public/.gitkeep
     cp ${current_dir}/writing ${current_dir}/config.ru ${current_dir}/Guardfile* ${path}
     cp ${current_dir}/.gitignore.scafford ${path}/.gitignore
     cp -r ${current_dir}/dockerfiles ${path}/
@@ -108,13 +106,15 @@ install() {
 
 build() {
     echo "Build document"
-    rm -rf ${current_dir}/public/assets
+    rm -rf ${current_dir}/public
+    mkdir -p ${current_dir}/public
 
     sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor /bin/bash -l -c \
-         "asciidoctor -r asciidoctor-diagram -o public/index.html src/index.adoc && \
+         "asciidoctor -r asciidoctor-diagram -o public/index.html assets/index.adoc && \
               find public/ -exec chown $USER_ID:$USER_GROUP {} \; "
 
-    cp -r ${current_dir}/assets ${current_dir}/public
+    cp -r ${current_dir}/assets/* ${current_dir}/public
+    find ${current_dir}/public -type f -name "*.adoc" | xargs rm
 }
 
 build-pdf() {
@@ -130,8 +130,8 @@ build-pdf() {
         exit 1
     fi
 
-    if [ ! -e src/index.adoc ]; then
-        echo "Not found `src/index.adoc`"
+    if [ ! -e assets/index.adoc ]; then
+        echo "Not found `assets/index.adoc`"
         exit 1
     fi
 
@@ -139,11 +139,13 @@ build-pdf() {
         param="-a pdf-stylesdir=assets/pdf/themes -a pdf-style=$theme -a pdf-fontdir=assets/pdf/fonts"
     fi
 
-    rm -rf ${current_dir}/public/assets
-    cp -r ${current_dir}/assets ${current_dir}/public
+    rm -rf ${current_dir}/public
+    mkdir -p ${current_dir}/public
+    cp -r ${current_dir}/assets/* ${current_dir}/public
+    find ${current_dir}/public -type f -name "*.adoc" | xargs rm
 
     sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor /bin/bash -c -l \
-         "asciidoctor -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf src/index.adoc"
+         "asciidoctor -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf assets/index.adoc"
 }
 
 subcommand() {

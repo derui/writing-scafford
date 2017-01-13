@@ -3,7 +3,7 @@ guard :shell do
 
   watch(%r{(.+\.adoc)}) {|m|
     p "Build document with #{m[1].to_s}"
-    `asciidoctor -r asciidoctor-pdf -r asciidoctor-diagram -b pdf -o /documents/public/index.pdf /documents/src/index.adoc`
+    `asciidoctor -r asciidoctor-pdf -r asciidoctor-diagram -b pdf -o /documents/public/index.pdf /documents/assets/index.adoc`
   }
 
   Process.fork do

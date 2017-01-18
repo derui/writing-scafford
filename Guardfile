@@ -11,7 +11,7 @@ end
 guard :shell do
   watch(%r{/mirror/assets/.*}) {|m|
     p "Sync assets to public"
-    `rsync -avh --del /documents/assets/* /documents/public`
+    `rsync -avh /documents/assets/* /documents/public`
     `find /documents/public -exec chown #{@current_user}:#{@current_group} {} \\;`
   }
 

@@ -142,10 +142,12 @@ build-pdf() {
     rm -rf ${current_dir}/public
     mkdir -p ${current_dir}/public
     cp -r ${current_dir}/assets/* ${current_dir}/public
-    find ${current_dir}/public -type f -name "*.adoc" | xargs rm
 
     sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor /bin/bash -c -l \
-         "asciidoctor -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf assets/index.adoc"
+         "asciidoctor -r asciidoctor-diagram -o public/${name}.html assets/index.adoc"
+    sudo docker run --name=asciidoctor -v ${current_dir}:/documents --rm asciidoctor /bin/bash -c -l \
+         "asciidoctor -r asciidoctor-diagram -r asciidoctor-pdf -b pdf $param -o public/${name}.pdf public/index.adoc && \
+              find public/ -exec chown $USER_ID:$USER_GROUP {} \; "
 }
 
 subcommand() {

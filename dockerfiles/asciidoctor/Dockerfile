@@ -37,5 +37,6 @@ WORKDIR /documents
 VOLUME /documents
 
 ADD watcher.rb /watcher.rb
+ENV LANG C.UTF-8
 
 CMD ["/bin/bash","-c","trap 'exit 0' INT; tail -f /dev/null"]

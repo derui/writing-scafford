@@ -34,7 +34,7 @@ serve() {
          -p 3000:3000 \
          asciidoctor /bin/bash -l -c "guard -w /mirror -i"
 
-    sudo docker run --name=$DRAWIO_SERVER -d -p 8000:8000 draw-io
+    sudo docker run --name=$DRAWIO_SERVER -d -p 32000:32000 draw-io
 }
 
 # launch contents server.
@@ -50,7 +50,7 @@ serve-pdf() {
          -p 3000:3000 \
          asciidoctor /bin/bash -l -c "guard -w /mirror -G /documents/Guardfile_pdf -i"
 
-    sudo docker run --name=$DRAWIO_SERVER -d -p 8000:8000 draw-io
+    sudo docker run --name=$DRAWIO_SERVER -d -p 32000:32000 draw-io
 }
 
 stop() {

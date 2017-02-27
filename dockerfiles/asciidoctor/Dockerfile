@@ -19,7 +19,7 @@ RUN apt-get update -y && \
     echo 'source /etc/profile.d/rvm.sh' >> ~/.bashrc && \
     /bin/bash -l -c "rvm install $RVM_RUBY_VERSION --binary" && \
     /bin/bash -l -c "rvm use --default $RVM_RUBY_VERSION && \
-        gem install --no-rdoc --no-ri asciidoctor asciidoctor-diagram guard guard-shell io-console guard-livereload rack rack-livereload eventmachine && \
+        gem install --no-rdoc --no-ri asciidoctor asciidoctor-diagram guard guard-shell io-console rack eventmachine && \
         gem install --no-ri --no-rdoc --pre asciidoctor-pdf && \
         gem cleanup" && \
     mkdir /mirror && \

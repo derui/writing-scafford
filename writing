@@ -30,7 +30,6 @@ serve() {
 
     sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -e USER_ID=$USER_ID -e USER_GROUP=$USER_GROUP \
-         -p 35729:35729 \
          -p 3000:3000 \
          asciidoctor /bin/bash -l -c "guard -w /mirror -i"
 
@@ -46,7 +45,6 @@ serve-pdf() {
 
     sudo docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -e USER_ID=$USER_ID -e USER_GROUP=$USER_GROUP \
-         -p 35729:35729 \
          -p 3000:3000 \
          asciidoctor /bin/bash -l -c "guard -w /mirror -G /documents/Guardfile_pdf -i"
 

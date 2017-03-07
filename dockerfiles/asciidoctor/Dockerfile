@@ -6,7 +6,7 @@ ENV RVM_RUBY_VERSION ruby-2.3.3
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends curl rsync fonts-migmix ca-certificates libfontconfig && \
+    apt-get install -y --no-install-recommends gcc g++ curl rsync fonts-migmix ca-certificates libfontconfig && \
     curl -L git.io/nodebrew | perl - setup && \
     export PATH=$HOME/.nodebrew/current/bin:$PATH && \
     echo 'export PATH=$HOME/.nodebrew/current/bin:$PATH' >> ~/.bashrc && \

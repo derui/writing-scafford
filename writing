@@ -16,8 +16,8 @@ USER_GROUP=$(id -g $USER)
 init() {
 
     echo "Build docker image to writing"
-    sudo docker build -t asciidoctor ${current_dir}/asciidoctor-docker/asciidoctor
-    sudo docker build -t draw-io ${current_dir}/asciidoctor-docker/draw-io
+    sudo docker build -t asciidoctor ${current_dir}/dockerfiles/asciidoctor
+    sudo docker build -t draw-io ${current_dir}/dockerfiles/draw-io
     echo "Done."
 }
 

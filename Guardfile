@@ -25,9 +25,4 @@ guard :shell do
     trap("INT") { exit 0}
     `ruby /watcher.rb`
   end
-
-  Process.fork do
-    trap("INT") {exit 0}
-    `rackup /documents/config.ru`
-  end
 end

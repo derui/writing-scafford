@@ -1,15 +1,17 @@
-= The writing scafford
+= The template for writing documents
 
-This repository is the scafford that define envirinment for writing document on some Linux distributions.
+This repository is the template that define envirinment for writing document site on some Linux distributions.
 
 Goals is here.
 
+* Can writing documents via AsciiDoc
+** Not use AsciiDoc, Use Asciidoctor
 * Can start easily.
 ** only clone this repository, or execute only one command.
 * Can incremental build documents
-** Include live-reload server.
-* Can publish some format
-** include html/pdf/epub ..
+* Can publish as single site that is able to open in local without any server.
+* Can not export pdf with entirely documents
+** So PDF searchability is poor. Searchability of documentations is very important feature for documentation I think
 
 Not goals of this repository.
 
@@ -25,60 +27,52 @@ Should clone each document root? Not need. Read Install section.
 
 WARNING: Requirements for this repository are changes frequency. Because I optimize environment and writing method something.
 
+* nodejs + npm
+** To use as an alternative for the `make` command.
 * Docker
-** To run asciidoctor.
+** To run hugo/asciidoctor.
 
-== Install ==
+== Installation ==
 
 1. Clone this repository to any location you like
-2. Run ++./writing init++ (only once)
-3. Run ++./writing install <directory>++
-4. You can writing in the path ++<directory>++ initialized above
+2. Delete .git directory if you need
+3. Run ++npm install++ (only once)
+4. Run ++npm run init++ (Needs if you first use this template)
+5. Run ++npm run new++ (only once)
+6. You can writing in the location cloned as you like with the Hugo\'s way.
 
 == Toolchain ==
 This scafford contains toolchains below.
 
+* Hugo
 * asciidoctor
 * asciidoctor-diagram
 ** Enable mermaid
-* asciidoctor-pdf
-** Enable publish pdf
+* draw.io
+** Use to draw complex drawing
 
-== Usage
+== Write documents
 
-All your documents wrote by asciidoc must be in ++src++ directory.
+You can run hugo server with the command below in your documentation directory.
 
-While writing, when you want to build your documents, type command follow.
-
-[source, shell]
-----
-$ ./writing build
-----
-
-If you felt tired to type build command each editing, you can launch automation-build server with follow command.
-
-NOTE: Your user must be on wheel group.
+NOTE: Your user must be on the docker group.
 
 [source, shell]
 ----
-$ ./writing serve
-# Stop servers
-$ ./writing stop
+$ npm run
 ----
 
-After above command, when you edit documents, then build and output it to ++public++ directory! And you can view it on browser at http://localhost:3000 .
+You visit from browser at http://localhost:1313 , you should be able to show generated site via Hugo!
 
-=== Publish PDF ===
-If you want to publish document as pdf, you should hold by follows.
-
-* The name of document root must be *index.adoc*
-* Themes are located at `assets/pdf/themes`
-* Fonts used in pdf document are located at `assets/pdf/fonts`
-
-Then, execute command below. Output document built as `public/name.pdf`.
+Execute command if you stop server.
 
 [source, shell]
 ----
-$ ./writing build-pdf <name> [name of theme]
+$ npm run stop
 ----
 
+.Building static site
+[source, shell]
+----
+$ npm run build
+----

@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "bash ./helper.bash start",
+    "stop": "bash ./helper.bash stop",
+    "build": "bash ./helper.bash build",
+    "init": "bash ./helper.bash init",
+    "new": "bash ./helper.bash new"
+  }
+}

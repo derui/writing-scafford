@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTENTS_SERVER=hugo
+CONTENTS_SERVER=sphinx
 DRAWIO_SERVER=draw-io
 
 set -eu
@@ -16,7 +16,7 @@ USER_GROUP=$(id -g $USER)
 init() {
 
     echo "Build docker image to writing"
-    docker build -t hugo-base ${current_dir}/.dockerfiles/hugo-base
+    docker build -t sphinx-base ${current_dir}/.dockerfiles/sphinx-base
     docker build -t draw-io ${current_dir}/.dockerfiles/draw-io
     echo "Done."
 
@@ -24,11 +24,15 @@ init() {
 
 # launch contents server.
 new() {
-    echo "Create new skeleton for static site."
+    echo "Create new sphinx project."
 
     docker run --name=$CONTENTS_SERVER --rm -v ${current_dir}:/documents -it \
          -e USER_ID=$USER_ID -e USER_GROUP=$USER_GROUP \
-         hugo-base /bin/bash -l -c 'hugo new site ./site && find ./site -exec chown $USER_ID:$USER_GROUP {} \; && mv site/* . && rm -rf site '
+         sphinx-base sphinx-quickstart doc
+
+    docker run --name=$CONTENTS_SERVER --rm -v ${current_dir}:/documents -it \
+         -e USER_ID=$USER_ID -e USER_GROUP=$USER_GROUP \
+         sphinx-base bash -c 'find doc -exec chown $USER_ID:$USER_GROUP {} \;'
 }
 
 # launch contents server.
@@ -39,8 +43,8 @@ start() {
 
     docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -e USER_ID=$USER_ID -e USER_GROUP=$USER_GROUP \
-         -p 1313:1313 \
-         hugo-base /bin/bash -l -c 'ruby /watcher.rb && sleep 2; hugo server --watch --bind 0.0.0.0'
+         -p 3000:8000 \
+         sphinx-base /bin/bash -l -c '(ruby /watcher.rb &) && sleep 2; sphinx-autobuild /mirror/doc /documents/doc/_build/html'
 
     docker run --name=$DRAWIO_SERVER -d -p 32000:8000 draw-io
 }
@@ -61,8 +65,8 @@ stop() {
 build() {
     echo "Build document"
 
-    docker run --name=${CONTENTS_SERVER} -v ${current_dir}:/documents --rm hugo-base /bin/bash -l -c \
-         "hugo && find public -exec chown $USER_ID:$USER_GROUP {} \; "
+    docker run --name=${CONTENTS_SERVER} -v ${current_dir}:/documents --rm sphinx-base /bin/bash -l -c \
+         "sphinx && find . -exec chown $USER_ID:$USER_GROUP {} \; "
 }
 
 subcommand() {

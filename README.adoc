@@ -4,8 +4,8 @@ This repository is the template that define envirinment for writing document sit
 
 Goals is here.
 
-* Can writing documents via AsciiDoc
-** Not use AsciiDoc, Use Asciidoctor
+* Can writing documents via reStructuredText
+** Use sphinx
 * Can start easily.
 ** only clone this repository, or execute only one command.
 * Can incremental build documents
@@ -16,7 +16,6 @@ Goals is here.
 Not goals of this repository.
 
 * Run on any platform
-** Using platforms by me are Windows and Linux, not include macOS.
 ** To be able to run linux on Windows with some virtualizations also VirtualBox, Hyper-V, VMware and others, macOS same.
 
 =======
@@ -44,10 +43,11 @@ WARNING: Requirements for this repository are changes frequency. Because I optim
 == Toolchain ==
 This scafford contains toolchains below.
 
-* Hugo
-* asciidoctor
-* asciidoctor-diagram
-** Enable mermaid
+* Sphinx
+** Use Read The Doc theme
+** sphinxcontrib-blockdiag
+** sphinxcontrib-seqdiag
+** sphinx-autobuild
 * draw.io
 ** Use to draw complex drawing
 

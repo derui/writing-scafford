@@ -65,8 +65,15 @@ stop() {
 build() {
     echo "Build document"
 
-    docker run --name=${CONTENTS_SERVER} -v ${current_dir}:/documents/doc --rm sphinx-base /bin/bash -l -c \
-         "make html && find . -exec chown $USER_ID:$USER_GROUP {} \; "
+    docker run --name=${CONTENTS_SERVER} -v ${current_dir}:/documents --rm sphinx-base /bin/bash -l -c \
+         "cd doc && make html && find . -exec chown $USER_ID:$USER_GROUP {} \; "
+}
+
+clean() {
+    echo "Clean built document"
+
+    docker run --name=${CONTENTS_SERVER} -v ${current_dir}:/documents --rm sphinx-base \
+           /bin/bash -l -c 'cd doc && make clean'
 }
 
 subcommand() {

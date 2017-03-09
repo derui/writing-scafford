@@ -21,7 +21,7 @@ RUN apt-get update -y && \
     cd / && \
     pip3 install sphinx sphinx_rtd_theme sphinxcontrib-blockdiag sphinxcontrib-seqdiag sphinx-autobuild && \
     mkdir /mirror && \
-    apt-get purge -y --auto-remove g++ gcc make patch automake autoconf automake libtool bison && \
+    apt-get purge -y --auto-remove g++ gcc patch autoconf automake libtool bison && \
     apt-get upgrade -y && apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*  && \
     rm -rf /Python-${PYTHON_VERSION}* /tmp/*
     

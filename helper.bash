@@ -43,7 +43,7 @@ start() {
 
     docker run --name=$CONTENTS_SERVER -v ${current_dir}:/documents -d \
          -e USER_ID=$USER_ID -e USER_GROUP=$USER_GROUP \
-         -p 8000:8000 \
+         -p 3000:3000 \
          sphinx-base /bin/bash -l -c '(ruby /watcher.rb &) && sleep 2; sphinx-autobuild -H 0.0.0.0 /mirror/doc/source /documents/doc/build/html'
 
     docker run --name=$DRAWIO_SERVER -d -p 32000:8000 draw-io

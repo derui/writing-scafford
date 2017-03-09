@@ -6,7 +6,7 @@ ENV RVM_RUBY_VERSION ruby-2.3.3
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends xz-utils gcc g++ curl rsync fonts-migmix ca-certificates libfontconfig zlib1g-dev libssl-dev && \
+    apt-get install -y --no-install-recommends xz-utils gcc g++ curl rsync fonts-ipafont-gothic ca-certificates libfontconfig zlib1g-dev libssl-dev && \
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 && \
     curl -sSL https://get.rvm.io | bash -s stable && \
     echo 'source /etc/profile.d/rvm.sh' >> ~/.bashrc && \

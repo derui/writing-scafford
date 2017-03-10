@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo docker build -t hugo-base .
+sudo docker build -t sphinx-base .
